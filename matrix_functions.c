@@ -5,25 +5,27 @@ void createMatrix(struct matrix *m, char filename[30]){
     //MAKE SURE THE TXT FILE DOESN'T CONTAIN SPACES
     FILE *fileptr = fopen(filename, "r");
 
-    char line[128];
-    fgets(line, 128, fileptr);
+    char line[100000];
+    fgets(line, 100000, fileptr);
     int nrow, ncol;
     if(sscanf(line, "%d %d", &nrow, &ncol) < 2) {
         ncol = 1;
     }
     m->row = nrow;
     m->col = ncol;
-
+ 
 
     float *data = (float *)malloc(m->row*m->col*sizeof(float));
     m->matrixData = (float **)malloc(m->row*sizeof(float*));
+
+
     for (int i=0; i<m->row; i++){
         m->matrixData[i] = &(data[m->col*i]);
     }
 
     char * matrixEntry;
     int fileRow = 0, fileCol = 0;
-    while(fgets(line,128,fileptr) != NULL) {
+    while(fgets(line,100000,fileptr) != NULL) {
         fileCol = 0;
         matrixEntry = strtok(line, " ");
         while(matrixEntry != NULL) {
@@ -35,7 +37,6 @@ void createMatrix(struct matrix *m, char filename[30]){
     }
     fclose(fileptr);
 
-    
 }
 
 void createZeroMatrix(struct matrix *m){
@@ -59,8 +60,8 @@ void freeMatrix(struct matrix *m) {
     free(m->matrixData);
 }
 
-void addVector(struct matrix * mat, struct matrix * vector){
-    for(int i = 0; i < mat->row; i ++){
+void addVector(struct matrix * mat, struct matrix * vector, int row){
+    for(int i = 0; i < row; i ++){
         for(int j = 0; j < mat->col; j++){
             mat->matrixData[i][j] += vector->matrixData[i][0];
         }
@@ -76,8 +77,8 @@ void printMatrix(struct matrix * mat){
     }
 }
 
-void sigmoidMatrix(struct matrix * mat){
-    for(int i = 0; i < mat->row; i++) {
+void sigmoidMatrix(struct matrix * mat, int row){
+    for(int i = 0; i < row; i++) {
         for(int j = 0; j < mat->col; j++) {
             mat->matrixData[i][j] = 1/(1 + exp(-(mat->matrixData[i][j])));
         }
@@ -85,12 +86,12 @@ void sigmoidMatrix(struct matrix * mat){
     }
 }
 
-void matrixMultiply(struct matrix * weight, struct matrix * input, struct matrix * output){
+void matrixMultiply(struct matrix * weight, struct matrix * input, struct matrix * output, int row){
 
     output->row = weight->row;
     output->col = input->col;
     createZeroMatrix(output);
-    for(int i = 0; i < weight->row; i++){
+    for(int i = 0; i < row; i++){
         for(int j = 0; j < input->col; j++) {
             for(int k = 0; k < weight->col; k++){
                 output->matrixData[i][j] += weight->matrixData[i][k] * input->matrixData[k][j];

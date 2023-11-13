@@ -16,10 +16,10 @@ struct matrix
 void createMatrix(struct matrix *m, char filename[30]);
 void createZeroMatrix(struct matrix *m);
 void freeMatrix(struct matrix *m);
-void addVector(struct matrix * mat, struct matrix * vector);
+void addVector(struct matrix * mat, struct matrix * vector, int row);
 void printMatrix(struct matrix * mat);
-void sigmoidMatrix(struct matrix * mat);
-void matrixMultiply(struct matrix * weight, struct matrix * input, struct matrix * output);
+void sigmoidMatrix(struct matrix * mat, int row);
+void matrixMultiply(struct matrix * weight, struct matrix * input, struct matrix * output, int row);
 void writeMatrix(struct matrix * mat, char filename[30]);
 
 

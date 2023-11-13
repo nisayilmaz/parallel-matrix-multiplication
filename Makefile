@@ -8,7 +8,7 @@ parallel: parallel.c matrix_functions.o
 	mpicc parallel.c matrix_functions.o -o parallel -lm
 
 serial: serial.c matrix_functions.o
-	gcc serial.c matrix_functions.o -o serial -lm
+	mpicc serial.c matrix_functions.o -o serial -lm
 
 clean:
 	rm -f parallel serial matrix_functions.o parallel_results.txt serial_results.txt
